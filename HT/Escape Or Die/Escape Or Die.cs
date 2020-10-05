@@ -7,13 +7,23 @@ using Jypeli.Widgets;
 
 public class EscapeOrDie : PhysicsGame
 {
+    PhysicsObject pelaaja;
     public override void Begin()
     {
-        LuoPelaaja(this, 20, 0, 0);
+       pelaaja = LuoSuorakaide(this, 20, 240, 0, 0);
+       LuoKentta();
 
         PhoneBackButton.Listen(ConfirmExit, "Lopeta peli");
         Keyboard.Listen(Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
     }
+
+
+    void LuoKentta()
+    {
+        Level.CreateBorders(false);
+        LuoSuorakaide(this, 20, 240, 24, 100);
+    }
+    
     /// <summary>
     /// Luo pelaajan
     /// </summary>
@@ -21,12 +31,13 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="koko">Pelaajan koko (neliön sivun pituus).</param>
     /// <param name="x">Pelaajan aloituspaikan x-koordinaatti.</param>
     /// <param name="y">Pelaajan aloituspaikan y-koordinaatti</param>
-    private static void LuoPelaaja(PhysicsGame peli, double koko, double x, double y)
+    private PhysicsObject LuoSuorakaide(PhysicsGame peli, double leveys,double korkeus, double x, double y)
     {
-        PhysicsObject pelaaja = new PhysicsObject(koko, koko, Shape.Rectangle);
-        pelaaja.X = x;
-        pelaaja.Y = y;
-        peli.Add(pelaaja);
+        PhysicsObject suorakaide = new PhysicsObject(leveys, korkeus, Shape.Rectangle);
+        suorakaide.X = x;
+        suorakaide.Y = y;
+        peli.Add(suorakaide);
+        return suorakaide;
     }
 }
 
