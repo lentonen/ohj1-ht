@@ -17,7 +17,7 @@ namespace Program
         [STAThread]
         static void Main()
         {
-            using (var game = new EscapeOrDie())
+            using (var game = new EOD())
                 game.Run();
         }
     }
