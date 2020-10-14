@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EscapeOrDie", "Escape Or Die\EscapeOrDie.csproj", "{7B3B4239-8ED2-4685-8305-A8E7CC21D75D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EOD", "EOD\EOD.csproj", "{875E2079-1F7E-42F9-B9D2-487A5C47388D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscapeOrDie", "EOD\EscapeOrDie.csproj", "{875E2079-1F7E-42F9-B9D2-487A5C47388D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7B3B4239-8ED2-4685-8305-A8E7CC21D75D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B3B4239-8ED2-4685-8305-A8E7CC21D75D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B3B4239-8ED2-4685-8305-A8E7CC21D75D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B3B4239-8ED2-4685-8305-A8E7CC21D75D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{875E2079-1F7E-42F9-B9D2-487A5C47388D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{875E2079-1F7E-42F9-B9D2-487A5C47388D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{875E2079-1F7E-42F9-B9D2-487A5C47388D}.Release|Any CPU.ActiveCfg = Release|Any CPU

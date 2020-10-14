@@ -17,7 +17,7 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="HT sunnitelma.svg"
-   inkscape:export-filename="D:\kurssit\ohj1\ht\suunnitelma\HTsuunnitelma.png"
+   inkscape:export-filename="D:\kurssit\ohj1\ht\HT\EOD\Content\avain.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -51,9 +51,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="343.11724"
-     inkscape:cy="78.720984"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="673.61895"
+     inkscape:cy="386.08005"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -70,7 +70,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -204,44 +204,56 @@
          x="247.14287"
          y="813.79077"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato">Este johon ei saa osua</tspan></text>
-    <rect
-       style="opacity:1;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3"
-       id="rect4193"
-       width="94.285713"
-       height="8.5714283"
-       x="248.57143"
-       y="972.36218"
-       ry="4.2857141" />
-    <rect
-       style="opacity:1;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3"
-       id="rect4195"
-       width="10.916061"
-       height="25.895035"
-       x="247.81381"
-       y="972.77319"
-       ry="5.975771" />
-    <rect
-       style="opacity:1;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3"
-       id="rect4195-9"
-       width="10.916061"
-       height="25.895035"
-       x="261.72729"
-       y="974.25983"
-       ry="5.975771" />
-    <ellipse
-       style="opacity:1;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3"
-       id="path4212"
-       cx="342.0629"
-       cy="978.99988"
-       rx="22.854702"
-       ry="18.309015" />
-    <ellipse
-       ry="10.98541"
-       rx="13.005714"
-       cy="978.99988"
-       cx="342.0629"
-       id="ellipse4214"
-       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3" />
+    <g
+       id="g4220"
+       transform="matrix(0.90826136,0,0,1.3967506,99.000619,-381.65973)"
+       inkscape:export-filename="D:\kurssit\ohj1\ht\HT\EOD\Content\avain.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="D:\kurssit\ohj1\ht\HT\EOD\Content\avain.png"
+         ry="4.2857141"
+         y="972.36218"
+         x="248.57143"
+         height="8.5714283"
+         width="94.285713"
+         id="rect4193"
+         style="opacity:1;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="D:\kurssit\ohj1\ht\HT\EOD\Content\avain.png"
+         ry="5.975771"
+         y="972.77319"
+         x="247.81381"
+         height="25.895035"
+         width="10.916061"
+         id="rect4195"
+         style="opacity:1;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="D:\kurssit\ohj1\ht\HT\EOD\Content\avain.png"
+         ry="5.975771"
+         y="974.25983"
+         x="261.72729"
+         height="25.895035"
+         width="10.916061"
+         id="rect4195-9"
+         style="opacity:1;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3" />
+      <ellipse
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="D:\kurssit\ohj1\ht\HT\EOD\Content\avain.png"
+         ry="18.309015"
+         rx="22.854702"
+         cy="978.99988"
+         cx="342.0629"
+         id="path4212"
+         style="opacity:1;fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3" />
+    </g>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:90px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -385,7 +397,10 @@
          id="tspan4338"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato">Hidastuseliksiirit: ?</tspan></text>
     <g
-       id="g4477">
+       id="g4477"
+       inkscape:export-filename="D:\kurssit\ohj1\ht\HT\EOD\Content\eliksiiri.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
       <rect
          ry="5.17343"
          y="563.79077"
