@@ -17,7 +17,7 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="HT sunnitelma.svg"
-   inkscape:export-filename="D:\kurssit\ohj1\ht\HT\EOD\Content\avain.png"
+   inkscape:export-filename="D:\kurssit\ohj1\ht\suunnitelma\HTsuunnitelma.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -52,7 +52,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.9899495"
-     inkscape:cx="673.04562"
+     inkscape:cx="521.52274"
      inkscape:cy="386.16029"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -385,20 +385,35 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:90px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="12.857142"
-       y="342.36221"
+       x="10.836838"
+       y="314.07794"
        id="text4334"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4336"
-         x="12.857142"
-         y="342.36221"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato">Elämät: ?</tspan><tspan
+         x="10.836838"
+         y="314.07794"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato" /><tspan
          sodipodi:role="line"
-         x="12.857142"
-         y="373.61221"
+         x="10.836838"
+         y="345.32794"
          id="tspan4338"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato">Hidastuseliksiirit: ?</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato">Eliksiirit: ?</tspan><tspan
+         sodipodi:role="line"
+         x="10.836838"
+         y="376.57794"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato"
+         id="tspan4208">Liikuttu matka: ?</tspan><tspan
+         sodipodi:role="line"
+         x="10.836838"
+         y="407.82794"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato"
+         id="tspan4210">Hypyt: ?</tspan><tspan
+         sodipodi:role="line"
+         x="10.836838"
+         y="439.07794"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato"
+         id="tspan4212">Status: ?</tspan></text>
     <g
        id="g4477"
        inkscape:export-filename="D:\kurssit\ohj1\ht\HT\EOD\Content\eliksiiri.png"
@@ -504,15 +519,15 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:90px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="631.34534"
-       y="557.38745"
+       x="610.13214"
+       y="552.33667"
        id="text4532"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4534"
-         x="631.34534"
-         y="557.38745"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato">Hidastuseliksiiri</tspan></text>
+         x="610.13214"
+         y="552.33667"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;font-family:lato;-inkscape-font-specification:lato">Eliksiiri, joka auttaa pysymään hengissä</tspan></text>
     <g
        id="g4575">
       <path

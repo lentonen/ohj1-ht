@@ -69,15 +69,12 @@ public class EscapeOrDie : PhysicsGame
     {
         ClearAll();
         Level.Background.CreateGradient(Color.Black, Color.White);
-        Label tarina1 = new Label(800, 800, "Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut.");
-        Label tarina2 = new Label(800, 800, "He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi.");
-        Label tarina3 = new Label(800, 800, "Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan!");
+        Label tarina1 = new Label(800, 800, "Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut.\n" +
+            "He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi.\n" +
+            "Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan.");
         tarina1.Position = new Vector(0, 50);
         Add(tarina1);
-        tarina2.Position = new Vector(0, 0);
-        Add(tarina2);
-        tarina3.Position = new Vector(0, -50);
-        Add(tarina3);
+       
 
         nappi1.Position = new Vector(0, -100);
         Add(nappi1);
@@ -130,7 +127,7 @@ public class EscapeOrDie : PhysicsGame
 
 
     // Pelikentän rakentamiseen tarvittavat aliohjelmat
-    //-----------------------------------------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
     /// <summary>
