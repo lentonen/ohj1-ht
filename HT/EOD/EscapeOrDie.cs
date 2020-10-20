@@ -10,9 +10,8 @@ public class EscapeOrDie : PhysicsGame
 {
 
     private PlatformCharacter pelaaja;
-    private PhysicsObject liikkuvaTaso;
-    private PhysicsObject[] liikkuvatTasot;
     private int avainLoytynyt;
+    private PhysicsObject liikkuvaTaso;
     private DoubleMeter matkaLaskuri;
     private IntMeter hypyt;
     private IntMeter eliksiirit;
@@ -20,6 +19,8 @@ public class EscapeOrDie : PhysicsGame
     private Label nappi1;
     private double kuolemanLuku;
     private MessageDisplay kuolemanNaytto;
+    private int elamatAlussa = 3;
+    private double[] pelaajanData;
 
 
 
@@ -62,6 +63,7 @@ public class EscapeOrDie : PhysicsGame
         ClearAll();
         LuoKentta();
         LisaaNappaimet();
+        pelaajanData = new double[3];
     }
 
 
@@ -119,6 +121,7 @@ public class EscapeOrDie : PhysicsGame
         HyppyLaskuri();
         LuoEliksiiriLaskuri();
         KuolemanNaytto();
+        LuoElamatNaytto();
 
         Camera.Follow(pelaaja);
         Camera.ZoomFactor = 5;
@@ -160,10 +163,11 @@ public class EscapeOrDie : PhysicsGame
         liikkuvaTaso.IgnoresGravity = true;
         liikkuvaTaso.MakeStatic();
         liikkuvaTaso.Position = paikka;
+        liikkuvaTaso.Restitution = 0;
         liikkuvaTaso.Color = Color.Black;
         liikkuvaTaso.Height = 5;
         Add(liikkuvaTaso);
-        liikkuvaTaso.Oscillate(suunta, 30, 2, vaihe);
+        liikkuvaTaso.Oscillate(suunta, 75, 0.2, vaihe);
         return liikkuvaTaso;
     }
 
@@ -173,11 +177,11 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void LuoTasot()
     {
-        liikkuvatTasot = new PhysicsObject[4];
-        liikkuvatTasot[0] = LisaaLiikkuvaTaso(new Vector(-200, -150), 50, 20, 0.5 * Math.PI, Vector.UnitX);
-        liikkuvatTasot[1] = LisaaLiikkuvaTaso(new Vector(-100, -150), 50, 20, -0.5 * Math.PI, Vector.UnitX);
-        liikkuvatTasot[2] = LisaaLiikkuvaTaso(new Vector(-200, -150), 50, 20, 0.5 * Math.PI, Vector.UnitY);
-        liikkuvatTasot[3] = LisaaLiikkuvaTaso(new Vector(-100, -150), 50, 20, -0.5 * Math.PI, Vector.UnitY);
+
+        LisaaLiikkuvaTaso(new Vector(150, 125), 50, 20, 0.5 * Math.PI, Vector.UnitX);
+        LisaaLiikkuvaTaso(new Vector(-350, 125), 50, 20, -0.35 * Math.PI, Vector.UnitX);
+        LisaaLiikkuvaTaso(new Vector(-100, 250), 50, 20, 0.75 * Math.PI, Vector.UnitY);
+        LisaaLiikkuvaTaso(new Vector(-425, 150), 50, 20, -0.5 * Math.PI, Vector.UnitY);
     }
 
     /// <summary>
@@ -279,7 +283,7 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void LisaaNappaimet()
     {
-        double nopeus = 200;
+        double nopeus = 200;   // kun halutaan pelaajan datan vaikuttavan nopeuteen+ pelaajanData[0] + pelaajanData[1] + pelaajanData[2];
         double hyppynopeus = 400;
 
         Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "Näytä ohjeet");
@@ -333,7 +337,6 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="eliksiiri">Törmäyksen kohde</param>
     private void TormaaEliksiiriin(PhysicsObject hahmo, PhysicsObject eliksiiri)
     {
-        MessageDisplay.Add("Keräsit hidastuseliksiirin!");
         eliksiirit.Value += 1;
         eliksiiri.Destroy();
     }
@@ -359,12 +362,11 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="avain"></param>
     private void PelaajaAvain(PhysicsObject pelaaja, PhysicsObject avain)
     {
-        MessageDisplay.Add("Löysit avaimen!");
         avainLoytynyt += 1;
         avain.Destroy();
     }
 
-    
+
     /// <summary>
     /// Aliohjelma kun törmätään piikkeihin
     /// </summary>
@@ -373,10 +375,21 @@ public class EscapeOrDie : PhysicsGame
     private void PelaajaPiikit(PhysicsObject pelaaja, PhysicsObject piikit)
     {
         MessageDisplay.Add("Kuolit piikkeihin");
+        elamatAlussa--;
+        TallennaData();
         ClearAll();
         LuoKentta();
         LisaaNappaimet();
     }
+
+
+    private void TallennaData()
+    {
+        pelaajanData[0] = hypyt.Value;
+        pelaajanData[1] = matkaLaskuri.Value;
+        pelaajanData[2] = eliksiirit.Value;
+    }
+
 
 
     // Laskurit
@@ -472,6 +485,15 @@ public class EscapeOrDie : PhysicsGame
     }
 
 
+    private void LuoElamatNaytto()
+    {
+        string elamat = elamatAlussa.ToString();
+        Label elamatNaytto = new Label(elamat);
+        elamatNaytto.Position = new Vector(-100, -100);
+        Add(elamatNaytto);
+    }
+
+
     /// <summary>
     /// Laskee pelaajan liikkeiden ja kerättyjen eliksiirien perusteella sen, tapetaanko pelaaja kokeen lopussa vai ei.
     /// Ohjelma näyttää näytöllä pelaajan statuksen.
@@ -479,7 +501,7 @@ public class EscapeOrDie : PhysicsGame
     private void NaytaKuolemanStatus()
     {
         kuolemanLuku = 1.0*hypyt.Value + matkaLaskuri.Value - 1.0*eliksiirit.Value;
-        if (kuolemanLuku < 10)
+        if (kuolemanLuku < 70)
         {
             kuolemanNaytto.Add("Selviät hengissä seuraavaan kokeeseen!");
         }
