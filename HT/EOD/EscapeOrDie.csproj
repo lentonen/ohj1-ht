@@ -19,6 +19,9 @@
         <None Update="Content\eliksiiri.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Content\evilNauru.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="Content\kentta1.txt">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
@@ -42,6 +45,9 @@
         </None>
         <None Update="Content\tahti.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Content\Taustamusa.wav">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

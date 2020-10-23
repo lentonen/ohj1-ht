@@ -18,6 +18,7 @@ public class EscapeOrDie : PhysicsGame
     private List<Label> valikko;
     private Label nappi1;
     private double kuolemanLuku;
+    private double kuolemanLuvunRaja = 20;
     private MessageDisplay kuolemanNaytto;
     private int elamatAlussa = 3;
     private double[] pelaajanData;
@@ -30,7 +31,8 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     public override void Begin()
     {
-        Alkuvalikko();      
+        Alkuvalikko();
+        MediaPlayer.Play("taustamusa");
     }
 
 
@@ -349,8 +351,22 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="ovi"></param>
     private void PelaajaOvella(PhysicsObject pelaaja, PhysicsObject ovi)
     {
-        if (avainLoytynyt == 1) MessageDisplay.Add("Amazing");
+        SoundEffect evilNauru = LoadSoundEffect("evilNauru");
+        if (avainLoytynyt == 1 && kuolemanLuku < kuolemanLuvunRaja) MessageDisplay.Add("Amazing");
         else MessageDisplay.Add("Käyppä etsimässä avain");
+        if (avainLoytynyt == 1 && kuolemanLuku > kuolemanLuvunRaja) 
+        {
+            evilNauru.Play();
+            Explosion rajahdys = new Explosion(200);
+            rajahdys.Position = pelaaja.Position;
+            Add(rajahdys);
+            elamatAlussa--;
+            avainLoytynyt = 0;
+            ClearAll();
+            LuoKentta();
+            LisaaNappaimet();
+        }   
+        
 
     }
 
@@ -501,14 +517,10 @@ public class EscapeOrDie : PhysicsGame
     private void NaytaKuolemanStatus()
     {
         kuolemanLuku = 1.0*hypyt.Value + matkaLaskuri.Value - 1.0*eliksiirit.Value;
-        if (kuolemanLuku < 70)
-        {
+        if (kuolemanLuku < kuolemanLuvunRaja)
             kuolemanNaytto.Add("Selviät hengissä seuraavaan kokeeseen!");
-        }
         else
-        {
             kuolemanNaytto.Add("Sinut tullaan tappamaan!");
-        }
     }
         
 
