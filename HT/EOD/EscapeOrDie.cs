@@ -33,6 +33,9 @@ public class EscapeOrDie : PhysicsGame
     // Äänet
     SoundEffect hyppyAani = LoadSoundEffect("hyppy");
     SoundEffect eliksiiriKeraysAani = LoadSoundEffect("eliksiirinkerays");
+    SoundEffect evilNauru = LoadSoundEffect("evilNauru");
+    
+
 
 
     /// <summary>
@@ -41,7 +44,7 @@ public class EscapeOrDie : PhysicsGame
     public override void Begin()
     {
         Alkuvalikko();
-        //MediaPlayer.Play("taustamusa");
+        MediaPlayer.Play("taustamusa");
     }
 
 
@@ -370,18 +373,13 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="ovi"></param>
     private void PelaajaOvella(PhysicsObject pelaaja, PhysicsObject ovi)
     {
-        SoundEffect evilNauru = LoadSoundEffect("evilNauru");
+        
         if (avainLoytynyt == 1 && kuolemanLuku < kuolemanLuvunRaja) MessageDisplay.Add("Amazing");
         else MessageDisplay.Add("Käyppä etsimässä avain");
         if (avainLoytynyt == 1 && kuolemanLuku > kuolemanLuvunRaja) 
         {
-            evilNauru.Play();
-            Explosion rajahdys = new Explosion(200);
-            rajahdys.Position = pelaaja.Position;
-            Add(rajahdys);
-            elamatAlussa--;
             avainLoytynyt = 0;
-            UusiPeli();
+            PelaajaKuolee();
         }   
         
 
@@ -395,6 +393,8 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="avain"></param>
     private void PelaajaAvain(PhysicsObject pelaaja, PhysicsObject avain)
     {
+        SoundEffect avaimenKeraysAani = LoadSoundEffect("avaimenKerays");
+        avaimenKeraysAani.Play();
         avainLoytynyt += 1;
         avain.Destroy();
     }
@@ -407,9 +407,23 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="piikit"></param>
     private void PelaajaPiikit(PhysicsObject pelaaja, PhysicsObject piikit)
     {
-        MessageDisplay.Add("Kuolit piikkeihin");
+        PelaajaKuolee();
+    }
+
+
+    /// <summary>
+    /// Ohjelma joka suoritetaan pelaajan kuollessa.
+    /// </summary>
+    private void PelaajaKuolee()
+    {
+        SoundEffect kuolemanAani = LoadSoundEffect("kuolema");
+        Sound kuolema = kuolemanAani.CreateSound();
+        kuolema.Volume = 1.0;
+        kuolema.Play();
         elamatAlussa--;
-        UusiPeli();
+        pelaaja.Destroy();
+        evilNauru.Play();
+        Timer.SingleShot(1, UusiPeli);
     }
 
 
@@ -514,18 +528,6 @@ public class EscapeOrDie : PhysicsGame
     }
 
 
-    private void LuoElamatNaytto()
-    {
-        string elamat = elamatAlussa.ToString();
-        Label elamatNaytto = new Label("Elämät: " +elamat);
-        elamatNaytto.Font = teksti;
-        elamatNaytto.TextColor = Color.Red;
-        elamatNaytto.X = Screen.Right - 172;
-        elamatNaytto.Y = Screen.Top - 50;
-        Add(elamatNaytto);
-    }
-
-
     /// <summary>
     /// Laskee pelaajan liikkeiden ja kerättyjen eliksiirien perusteella sen, tapetaanko pelaaja kokeen lopussa vai ei.
     /// Ohjelma näyttää näytöllä pelaajan statuksen.
@@ -537,6 +539,21 @@ public class EscapeOrDie : PhysicsGame
             kuolemanNaytto.Add(" Selviät hengissä seuraavaan kokeeseen! ");
         else
             kuolemanNaytto.Add(" Sinut tullaan tappamaan! ");
+    }
+
+
+    /// <summary>
+    /// Luo tekstikentän, jossa näytetään pelaajan elämät.
+    /// </summary>
+    private void LuoElamatNaytto()
+    {
+        string elamat = elamatAlussa.ToString();
+        Label elamatNaytto = new Label("Elämät: " + elamat);
+        elamatNaytto.Font = teksti;
+        elamatNaytto.TextColor = Color.Red;
+        elamatNaytto.X = Screen.Right - 172;
+        elamatNaytto.Y = Screen.Top - 50;
+        Add(elamatNaytto);
     }
 }
 
