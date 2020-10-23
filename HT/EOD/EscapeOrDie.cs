@@ -8,22 +8,31 @@ using Jypeli.Widgets;
 
 public class EscapeOrDie : PhysicsGame
 {
+    // Pelaajaan liittyvät
+    private PlatformCharacter pelaaja;          // PlatformCharacter-tyyppinen pelaaja
+    private int elamatAlussa = 3;               // Pelaajan elämät alussa
+    private int avainLoytynyt;                  // Muuttuja joka reagoi avainmen löytymiseen
+    
+    
+    //Laskureihin liittyvät
+    private DoubleMeter matkaLaskuri;           // Pelaajan liikkumaa matkaa laskeva laskuri
+    private IntMeter hypyt;                     // Pelaajan hyppyjä laskeva laskuri
+    private IntMeter eliksiirit;                // Pelaajan keräämiä eliksiirejä laskeva laskuri
+    private double kuolemanLuku;                // Luku joka lasketaan eliksiirien, hyppyjen ja matkan perusteella
+    private double kuolemanLuvunRaja = 20;      // Raja-arvo, jonka ylittäminen aiheuttaa pelaajan tuhoutumisen kentän lopussa. 
+    private MessageDisplay kuolemanNaytto;      // Näyttö joka näyttää pelaajan selviytymisen laskureista laskettujen arvojen perusteella.
+    private double[] pelaajanData;              // Taulukko johon pelaajan data tallennetaan kentän lopussa
 
-    private PlatformCharacter pelaaja;
-    private int avainLoytynyt;
-    private PhysicsObject liikkuvaTaso;
-    private DoubleMeter matkaLaskuri;
-    private IntMeter hypyt;
-    private IntMeter eliksiirit;
-    private List<Label> valikko;
-    private Label nappi1;
-    private double kuolemanLuku;
-    private double kuolemanLuvunRaja = 20;
-    private MessageDisplay kuolemanNaytto;
-    private int elamatAlussa = 3;
-    private double[] pelaajanData;
+    // Valikkoon liittyvät
+    private List<Label> valikko;                // Label-lista valikon napeista TODO: Muuta taulukoksi
+    private Label nappi1;                       // Nappi joka käynnistää pelin. Attribuuttina koska käytetään parissa eri kohdassa.
+    
+    // Pelikenttään liittyvät
+    private PhysicsObject liikkuvaTaso;         // Pelikentällä liikkuvat tasot
 
-
+    // Äänet
+    SoundEffect hyppyAani = LoadSoundEffect("hyppy");
+    SoundEffect eliksiiriKeraysAani = LoadSoundEffect("eliksiirinkerays");
 
 
     /// <summary>
@@ -32,7 +41,7 @@ public class EscapeOrDie : PhysicsGame
     public override void Begin()
     {
         Alkuvalikko();
-        MediaPlayer.Play("taustamusa");
+        //MediaPlayer.Play("taustamusa");
     }
 
 
@@ -323,6 +332,7 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="hyppyVoima">Hypyn voimakkuus</param>
     private void Hyppaa(PlatformCharacter hahmo, double hyppyVoima)
     {
+        hyppyAani.Play();
         hahmo.Jump(hyppyVoima);
         hypyt.Value += 1;
     }
@@ -339,6 +349,7 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="eliksiiri">Törmäyksen kohde</param>
     private void TormaaEliksiiriin(PhysicsObject hahmo, PhysicsObject eliksiiri)
     {
+        eliksiiriKeraysAani.Play();
         eliksiirit.Value += 1;
         eliksiiri.Destroy();
     }
@@ -460,8 +471,7 @@ public class EscapeOrDie : PhysicsGame
 
         hypytNaytto.BindTo(hypyt);
         Add(hypytNaytto);
-       
-       // if (Keyboard.GetKeyState(Key.Up) == ButtonState.Pressed) hypyt.Value += 1;
+        // if (Keyboard.GetKeyState(Key.Up) == ButtonState.Pressed) hypyt.Value += 1;
     }
 
 
@@ -490,7 +500,7 @@ public class EscapeOrDie : PhysicsGame
     {
         kuolemanNaytto = new MessageDisplay();
         kuolemanNaytto.MaxMessageCount = 0;
-        kuolemanNaytto.Position = new Vector(350, 400);
+        kuolemanNaytto.Position = new Vector(350, 100);
         kuolemanNaytto.MessageTime = new TimeSpan(0,0,0,1);
         Add(kuolemanNaytto);
 
@@ -516,7 +526,7 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void NaytaKuolemanStatus()
     {
-        kuolemanLuku = 1.0*hypyt.Value + matkaLaskuri.Value - 1.0*eliksiirit.Value;
+        kuolemanLuku = 1.0 * hypyt.Value + matkaLaskuri.Value - 1.0 * eliksiirit.Value;
         if (kuolemanLuku < kuolemanLuvunRaja)
             kuolemanNaytto.Add("Selviät hengissä seuraavaan kokeeseen!");
         else
