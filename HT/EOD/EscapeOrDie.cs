@@ -37,11 +37,6 @@ public class EscapeOrDie : PhysicsGame
     SoundEffect eliksiiriKeraysAani = LoadSoundEffect("eliksiirinkerays");
     SoundEffect evilNauru = LoadSoundEffect("evilNauru");
 
-    // Fontit
-    
-
-
-
 
     /// <summary>
     /// Escape Or Die- peli
@@ -58,30 +53,33 @@ public class EscapeOrDie : PhysicsGame
     private void Alkuvalikko()
     {
         ClearAll();
-        Font valikonFontti = LoadFont("valikkoFontti.ttf");
-        MediaPlayer.Play("taustamusa");
+
+        // Valikon ulkoasu, fontit ja taustamusiikki
+        Font valikonFontti = LoadFont("valikkoFontti.ttf");        
+        MediaPlayer.Play("taustamusa");                             
         MediaPlayer.IsRepeating = true;
         teksti = LoadFont("teksti.ttf");
         Level.Background.CreateGradient(Color.Black, Color.White);
+        
+        // Valikon näppäimet
         valikko = new Label[3];
-        
-        
-        nappiAloita = new Label("Aloita Peli");         // Luo näppäimen "Aloita Peli"
+        nappiAloita = new Label("Aloita Peli");                      // Luo näppäimen "Aloita Peli"
         nappiAloita.Font = valikonFontti;
         nappiAloita.Position = new Vector(0, 50);
         valikko[0] =nappiAloita;
         Add(nappiAloita);
 
-        Label nappiTarina = new Label("Lue Tarina");    // Luo näppäimen "Lue Tarina"
+        Label nappiTarina = new Label("Lue Tarina");                 // Luo näppäimen "Lue Tarina"
         nappiTarina.Font = valikonFontti;
         nappiTarina.Position = new Vector(0, -50);
         valikko[1] = nappiTarina;
         Add(nappiTarina);
 
-        Label nappiUusiPeli = new Label("Uusi Peli");   // Luo näppäimen "Uusi Peli"
+        Label nappiUusiPeli = new Label("Uusi Peli");                // Luo näppäimen "Uusi Peli"
         nappiUusiPeli.Position = new Vector(0, -100);
         valikko[2] = nappiUusiPeli;
 
+        // Hiiren kuuntelijat
         Mouse.ListenOn(nappiAloita, MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
         Mouse.ListenOn(nappiTarina, MouseButton.Left, ButtonState.Pressed, NaytaTarina, null);
         Mouse.ListenMovement(1.0, ValikkoLiike, null);
@@ -94,21 +92,25 @@ public class EscapeOrDie : PhysicsGame
     private void GameOverValikko()
     {
         ClearAll();
+        elamatAlussa = 3;
 
+        //Fontti ja tausta
         Font valikonFontti = LoadFont("valikkoFontti.ttf");         
         Level.Background.CreateGradient(Color.Black, Color.White);
-        elamatAlussa = 3;
         
+        // "Game Over"- teksti
         Label gameOver = new Label(600, 300, "GAME OVER");
         gameOver.SizeMode = TextSizeMode.StretchText;
         gameOver.Font = valikonFontti;
         gameOver.Position = new Vector(0, 100);
         Add(gameOver);
 
+        // "Uusi Peli"- näppäimen lisääminen
         valikko[2].Position = new Vector(0, -100);      // taulukossa valikko[2]= nappiUusiPeli
         valikko[2].Font = valikonFontti;
-
         Add(valikko[2]);
+
+        // Hiiren kuuntelijat
         Mouse.ListenOn(valikko[2], MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
         Mouse.ListenMovement(1.0, ValikkoLiike, null);
     }
@@ -125,11 +127,15 @@ public class EscapeOrDie : PhysicsGame
     }
 
 
+    /// <summary>
+    /// Näyttää pelin taustatarinan. Näytetään myös "Uusi Peli"- painike taustatarinan alapuolella.
+    /// </summary>
     private void NaytaTarina()
     {
         ClearAll();
-        
         Level.Background.CreateGradient(Color.Black, Color.White);
+        
+        // Tekstikenttä tarinalle
         Label tarina1 = new Label(600, 600, "Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut. He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi."
             +"Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan.");
         tarina1.Font = teksti;
@@ -137,14 +143,19 @@ public class EscapeOrDie : PhysicsGame
         tarina1.Position = new Vector(0, 100);
         Add(tarina1);
        
-
+        // "Uusi Peli"- näppäimen lisääminen 
         nappiAloita.Position = new Vector(0, -50);
         Add(nappiAloita);
+        
+        // Hiiren kuuntelijat
         Mouse.ListenOn(nappiAloita, MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
         Mouse.ListenMovement(1.0, ValikkoLiike, null);
     }
 
 
+    /// <summary>
+    /// Muuttaa valikon tekstien värin, kun hiiri viedään tekstin päälle.
+    /// </summary>
     private void ValikkoLiike()
     {
         foreach (Label nappi in valikko)
@@ -163,13 +174,15 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void LuoKentta()
     {
-        Gravity = new Vector(0, -1000);
+        Gravity = new Vector(0, -1000);    // Painovoima
+        
+        // Luodaan TileMap-taulukkon, johon tallennetaan kaikki kentät.
         TileMap[] kenttaTaulukko = new TileMap[2];
         kenttaTaulukko[0] = TileMap.FromLevelAsset("kentta1.txt");
         kenttaTaulukko[1] = TileMap.FromLevelAsset("kentta2.txt");
 
+        // Haetaan oikea kenttä taulukosta kenttaNro avulla ja luodaan kenttä.
         TileMap kentta = kenttaTaulukko[kenttaNro - 1];
-
         kentta.SetTileMethod('#', LisaaTaso);
         kentta.SetTileMethod('*', LisaaEliksiiri);
         kentta.SetTileMethod('P', LisaaPelaaja);
@@ -177,10 +190,11 @@ public class EscapeOrDie : PhysicsGame
         kentta.SetTileMethod('A', LisaaAvain);
         kentta.SetTileMethod('E', LisaaPiikit);
         kentta.Execute(20, 20);
-        Level.CreateBorders();
+        Level.CreateBorders();  
         Level.Background.CreateGradient(Color.Black, Color.White);
-
         MessageDisplay.Font = teksti;
+
+        //Luodaan Laskurit, näytettävä teksti sekä liikkuvat tasot
         LuoTasot();
         LuoMatkaLaskuri();
         HyppyLaskuri();
@@ -188,6 +202,7 @@ public class EscapeOrDie : PhysicsGame
         KuolemanNaytto();
         LuoElamatNaytto();
 
+        // Kameran asetukset
         Camera.Follow(pelaaja);
         Camera.ZoomFactor = 5;
         Camera.StayInLevel = true;
@@ -242,7 +257,6 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void LuoTasot()
     {
-
         LisaaLiikkuvaTaso(new Vector(150, 125), 50, 20, 0.5 * Math.PI, Vector.UnitX);
         LisaaLiikkuvaTaso(new Vector(-350, 125), 50, 20, -0.35 * Math.PI, Vector.UnitX);
         LisaaLiikkuvaTaso(new Vector(-100, 250), 50, 20, 0.75 * Math.PI, Vector.UnitY);
@@ -326,7 +340,6 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="korkeus">Pelaajan korkeus</param>
     private void LisaaPelaaja(Vector paikka, double leveys, double korkeus)
     {
-        
         pelaaja = new PlatformCharacter(leveys, korkeus);
         pelaaja.Position = paikka;
         pelaaja.Height = 15;
@@ -415,8 +428,7 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="pelaaja"></param>
     /// <param name="ovi"></param>
     private void PelaajaOvella(PhysicsObject pelaaja, PhysicsObject ovi)
-    {
-        
+    {   
         if (avainLoytynyt == 1 && kuolemanLuku < kuolemanLuvunRaja) 
         {
             SoundEffect kenttaLapi = LoadSoundEffect("aplodit");
@@ -425,15 +437,12 @@ public class EscapeOrDie : PhysicsGame
             kenttaNro++;
             UusiPeli();
         }
-        
         else MessageDisplay.Add("Käyppä etsimässä avain");
         if (avainLoytynyt == 1 && kuolemanLuku > kuolemanLuvunRaja) 
         {
             avainLoytynyt = 0;
             PelaajaKuolee();
         }   
-        
-
     }
 
 
@@ -476,15 +485,8 @@ public class EscapeOrDie : PhysicsGame
         pelaaja.Destroy();
         evilNauru.Play();
         if (elamatAlussa > 0) Timer.SingleShot(1, UusiPeli);
-        else GameOverValikko();
-        
-
-        
+        else GameOverValikko();     
     }
-
-
-
-
 
     // Laskurit
     //-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -612,4 +614,3 @@ public class EscapeOrDie : PhysicsGame
         Add(elamatNaytto);
     }
 }
-
