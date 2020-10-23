@@ -21,12 +21,12 @@ public class EscapeOrDie : PhysicsGame
     private double kuolemanLuku;                // Luku joka lasketaan eliksiirien, hyppyjen ja matkan perusteella
     private double kuolemanLuvunRaja = 20;      // Raja-arvo, jonka ylittäminen aiheuttaa pelaajan tuhoutumisen kentän lopussa. 
     private MessageDisplay kuolemanNaytto;      // Näyttö joka näyttää pelaajan selviytymisen laskureista laskettujen arvojen perusteella.
-    private double[] pelaajanData;              // Taulukko johon pelaajan data tallennetaan kentän lopussa
 
     // Valikkoon liittyvät
-    private List<Label> valikko;                // Label-lista valikon napeista TODO: Muuta taulukoksi
+    private Label[] valikko;                    // Label-taulukko valikon napeista
     private Label nappi1;                       // Nappi joka käynnistää pelin. Attribuuttina koska käytetään parissa eri kohdassa.
-    
+    private Font teksti;                        // Fontti jota käytetään laskureissa ja valikon tarinassa.
+
     // Pelikenttään liittyvät
     private PhysicsObject liikkuvaTaso;         // Pelikentällä liikkuvat tasot
 
@@ -50,17 +50,21 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void Alkuvalikko()
     {
+        Font valikonFontti = LoadFont("valikkoFontti.ttf");
+        teksti = LoadFont("teksti.ttf");
         Level.Background.CreateGradient(Color.Black, Color.White);
-        valikko = new List<Label>();
+        valikko = new Label[2];
         
         nappi1 = new Label("Aloita Peli");
+        nappi1.Font = valikonFontti;
         nappi1.Position = new Vector(0, 50);
-        valikko.Add(nappi1);
+        valikko[0] =nappi1;
         Add(nappi1);
 
         Label nappi2 = new Label("Lue Tarina");
+        nappi2.Font = valikonFontti;
         nappi2.Position = new Vector(0, -50);
-        valikko.Add(nappi2);
+        valikko[1] = nappi2;
         Add(nappi2);
 
         Mouse.ListenOn(nappi1, MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
@@ -69,22 +73,26 @@ public class EscapeOrDie : PhysicsGame
     }
 
 
+    /// <summary>
+    /// Käynnistää uuden pelin.
+    /// </summary>
     private void UusiPeli()
     {
         ClearAll();
         LuoKentta();
         LisaaNappaimet();
-        pelaajanData = new double[3];
     }
 
 
     private void NaytaTarina()
     {
         ClearAll();
+        
         Level.Background.CreateGradient(Color.Black, Color.White);
         Label tarina1 = new Label(800, 800, "Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut.\n" +
             "He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi.\n" +
             "Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan.");
+        tarina1.Font = teksti;
         tarina1.Position = new Vector(0, 50);
         Add(tarina1);
        
@@ -102,7 +110,7 @@ public class EscapeOrDie : PhysicsGame
         {
             if (Mouse.IsCursorOn(nappi))
             {
-                nappi.TextColor = Color.Pink;
+                nappi.TextColor = Color.Red;
             }
             else nappi.TextColor = Color.White;
         }
@@ -126,7 +134,7 @@ public class EscapeOrDie : PhysicsGame
         Level.CreateBorders();
         Level.Background.CreateGradient(Color.Black, Color.White);
 
-
+        MessageDisplay.Font = teksti;
         LuoTasot();
         LuoMatkaLaskuri();
         HyppyLaskuri();
@@ -294,7 +302,7 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void LisaaNappaimet()
     {
-        double nopeus = 200;   // kun halutaan pelaajan datan vaikuttavan nopeuteen+ pelaajanData[0] + pelaajanData[1] + pelaajanData[2];
+        double nopeus = 200;
         double hyppynopeus = 400;
 
         Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "Näytä ohjeet");
@@ -373,9 +381,7 @@ public class EscapeOrDie : PhysicsGame
             Add(rajahdys);
             elamatAlussa--;
             avainLoytynyt = 0;
-            ClearAll();
-            LuoKentta();
-            LisaaNappaimet();
+            UusiPeli();
         }   
         
 
@@ -403,19 +409,10 @@ public class EscapeOrDie : PhysicsGame
     {
         MessageDisplay.Add("Kuolit piikkeihin");
         elamatAlussa--;
-        TallennaData();
-        ClearAll();
-        LuoKentta();
-        LisaaNappaimet();
+        UusiPeli();
     }
 
 
-    private void TallennaData()
-    {
-        pelaajanData[0] = hypyt.Value;
-        pelaajanData[1] = matkaLaskuri.Value;
-        pelaajanData[2] = eliksiirit.Value;
-    }
 
 
 
@@ -436,7 +433,8 @@ public class EscapeOrDie : PhysicsGame
         aikaLaskurinTriggeri.Start();
 
         Label aikaNaytto = new Label();
-        aikaNaytto.X = Screen.Right - 100;
+        aikaNaytto.Font = teksti;
+        aikaNaytto.X = Screen.Right - 117;
         aikaNaytto.Y = Screen.Top - 150;
         aikaNaytto.TextColor = Color.White;
         aikaNaytto.DecimalPlaces = 1;
@@ -464,7 +462,8 @@ public class EscapeOrDie : PhysicsGame
         hypyt = new IntMeter(0);
 
         Label hypytNaytto = new Label();
-        hypytNaytto.X = Screen.Right - 157;
+        hypytNaytto.Font = teksti;
+        hypytNaytto.X = Screen.Right - 177;
         hypytNaytto.Y = Screen.Top - 100;
         hypytNaytto.TextColor = Color.White;
         hypytNaytto.Title = "Hypyt";
@@ -483,7 +482,8 @@ public class EscapeOrDie : PhysicsGame
         eliksiirit = new IntMeter(0);
 
         Label eliksiiritNaytto = new Label();
-        eliksiiritNaytto.X = Screen.Right - 145;
+        eliksiiritNaytto.Font = teksti;
+        eliksiiritNaytto.X = Screen.Right - 165;
         eliksiiritNaytto.Y = Screen.Top - 200;
         eliksiiritNaytto.TextColor = Color.White;
         eliksiiritNaytto.Title = "Eliksiirit";
@@ -499,8 +499,11 @@ public class EscapeOrDie : PhysicsGame
     private void KuolemanNaytto()
     {
         kuolemanNaytto = new MessageDisplay();
+        kuolemanNaytto.Font = teksti;
+        kuolemanNaytto.TextColor = Color.White;
+        kuolemanNaytto.BackgroundColor = Color.Black;
         kuolemanNaytto.MaxMessageCount = 0;
-        kuolemanNaytto.Position = new Vector(350, 100);
+        kuolemanNaytto.Position = new Vector(350, 190);
         kuolemanNaytto.MessageTime = new TimeSpan(0,0,0,1);
         Add(kuolemanNaytto);
 
@@ -514,8 +517,11 @@ public class EscapeOrDie : PhysicsGame
     private void LuoElamatNaytto()
     {
         string elamat = elamatAlussa.ToString();
-        Label elamatNaytto = new Label(elamat);
-        elamatNaytto.Position = new Vector(-100, -100);
+        Label elamatNaytto = new Label("Elämät: " +elamat);
+        elamatNaytto.Font = teksti;
+        elamatNaytto.TextColor = Color.Red;
+        elamatNaytto.X = Screen.Right - 172;
+        elamatNaytto.Y = Screen.Top - 50;
         Add(elamatNaytto);
     }
 
@@ -528,11 +534,9 @@ public class EscapeOrDie : PhysicsGame
     {
         kuolemanLuku = 1.0 * hypyt.Value + matkaLaskuri.Value - 1.0 * eliksiirit.Value;
         if (kuolemanLuku < kuolemanLuvunRaja)
-            kuolemanNaytto.Add("Selviät hengissä seuraavaan kokeeseen!");
+            kuolemanNaytto.Add(" Selviät hengissä seuraavaan kokeeseen! ");
         else
-            kuolemanNaytto.Add("Sinut tullaan tappamaan!");
+            kuolemanNaytto.Add(" Sinut tullaan tappamaan! ");
     }
-        
-
 }
 
