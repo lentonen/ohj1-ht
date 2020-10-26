@@ -28,7 +28,7 @@ public class EscapeOrDie : PhysicsGame
     private IntMeter hypyt;                     // Pelaajan hyppyjä laskeva laskuri
     private IntMeter eliksiirit;                // Pelaajan keräämiä eliksiirejä laskeva laskuri
     private double kuolemanLuku;                // Luku joka lasketaan eliksiirien, hyppyjen ja matkan perusteella
-    private double kuolemanLuvunRaja = 20;      // Raja-arvo, jonka ylittäminen aiheuttaa pelaajan tuhoutumisen kentän lopussa. 
+    private double kuolemanLuvunRaja = 70;      // Raja-arvo, jonka ylittäminen aiheuttaa pelaajan tuhoutumisen kentän lopussa. 
     private MessageDisplay kuolemanNaytto;      // Näyttö joka näyttää pelaajan selviytymisen laskureista laskettujen arvojen perusteella.
 
     // Valikkoon liittyvät
@@ -232,7 +232,7 @@ public class EscapeOrDie : PhysicsGame
         Camera.Follow(pelaaja);
         Camera.ZoomFactor = 5;
         Camera.StayInLevel = true;
-        IsFullScreen = true;
+        //IsFullScreen = true;                          //Tämä päälle, jos halutaan FullScreen.
     }
 
 
@@ -397,19 +397,11 @@ public class EscapeOrDie : PhysicsGame
         Keyboard.Listen(Key.Left, ButtonState.Down, Liikuta, "Liikkuu vasemmalle", pelaaja, -nopeus);
         Keyboard.Listen(Key.Right, ButtonState.Down, Liikuta, "Liikkuu vasemmalle", pelaaja, nopeus);
         Keyboard.Listen(Key.Up, ButtonState.Pressed, Hyppaa, "Pelaaja hyppää", pelaaja, hyppynopeus);
-
-        /*ControllerOne.Listen(Button.Back, ButtonState.Pressed, Exit, "Poistu pelistä");
-
-        ControllerOne.Listen(Button.DPadLeft, ButtonState.Down, Liikuta, "Pelaaja liikkuu vasemmalle", pelaaja, -nopeus);
-        ControllerOne.Listen(Button.DPadRight, ButtonState.Down, Liikuta, "Pelaaja liikkuu oikealle", pelaaja, nopeus);
-        ControllerOne.Listen(Button.A, ButtonState.Pressed, Hyppaa, "Pelaaja hyppää", pelaaja, hyppynopeus);*/
-
-        PhoneBackButton.Listen(ConfirmExit, "Lopeta peli");
     }
 
-    
+
     /// <summary>
-    /// Aliohjelma jonka avulla pelaajaa voidaan liikuttaa
+    /// Aliohjelma jonka avulla pelaajaa voidaan liikuttaa.
     /// </summary>
     /// <param name="hahmo">Objekti jota halutaan liikuttaa</param>
     /// <param name="nopeus">Liikuttelunopeus</param>
@@ -420,7 +412,7 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
-    /// Aliohjelma jonka avulla pelaaja voi hypätä
+    /// Aliohjelma jonka avulla pelaaja voi hypätä.
     /// </summary>
     /// <param name="hahmo">Objekti jonka halutaan hyppäävän</param>
     /// <param name="hyppyVoima">Hypyn voimakkuus</param>
@@ -437,7 +429,7 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
-    /// Aliohjelma kun törmätään hidastuseliksiiriin
+    /// Aliohjelma kun törmätään hidastuseliksiiriin.
     /// </summary>
     /// <param name="hahmo">Törmääjä</param>
     /// <param name="eliksiiri">Törmäyksen kohde</param>
@@ -474,7 +466,7 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
-    /// Aliohjelma kun törmätään avaimeen
+    /// Aliohjelma kun törmätään avaimeen.
     /// </summary>
     /// <param name="pelaaja"></param>
     /// <param name="avain"></param>
@@ -488,7 +480,7 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
-    /// Aliohjelma kun törmätään piikkeihin
+    /// Aliohjelma kun törmätään piikkeihin.
     /// </summary>
     /// <param name="pelaaja"></param>
     /// <param name="piikit"></param>
@@ -520,26 +512,26 @@ public class EscapeOrDie : PhysicsGame
 
     
     /// <summary>
-    /// Laskuri joka laskee pelaajan kulkemaa matkaa
+    /// Laskuri joka laskee pelaajan kulkemaa matkaa.
     /// </summary>
     private void LuoMatkaLaskuri()
     {
         matkaLaskuri = new DoubleMeter(0);
 
-        Timer aikaLaskurinTriggeri = new Timer();
-        aikaLaskurinTriggeri.Interval = 0.05;
-        aikaLaskurinTriggeri.Timeout += LaskeJosNappiPohjassa;
-        aikaLaskurinTriggeri.Start();
+        Timer matkaLaskurinTriggeri = new Timer();
+        matkaLaskurinTriggeri.Interval = 0.05;
+        matkaLaskurinTriggeri.Timeout += LaskeJosNappiPohjassa;
+        matkaLaskurinTriggeri.Start();
 
-        Label aikaNaytto = new Label();
-        aikaNaytto.Font = teksti;
-        aikaNaytto.X = Screen.Right - 117;
-        aikaNaytto.Y = Screen.Top - 150;
-        aikaNaytto.TextColor = Color.White;
-        aikaNaytto.DecimalPlaces = 1;
-        aikaNaytto.BindTo(matkaLaskuri);
-        aikaNaytto.DoubleFormatString = "Liikuttu matka {0:N1}m";
-        Add(aikaNaytto);
+        Label matkaNaytto = new Label();
+        matkaNaytto.Font = teksti;
+        matkaNaytto.X = Screen.Right - 117;
+        matkaNaytto.Y = Screen.Top - 150;
+        matkaNaytto.TextColor = Color.White;
+        matkaNaytto.DecimalPlaces = 1;
+        matkaNaytto.BindTo(matkaLaskuri);
+        matkaNaytto.DoubleFormatString = "Liikuttu matka {0:N1}m";
+        Add(matkaNaytto);
     }
 
     
@@ -569,7 +561,6 @@ public class EscapeOrDie : PhysicsGame
 
         hypytNaytto.BindTo(hypyt);
         Add(hypytNaytto);
-        // if (Keyboard.GetKeyState(Key.Up) == ButtonState.Pressed) hypyt.Value += 1;
     }
 
 
@@ -619,12 +610,27 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void NaytaKuolemanStatus()
     {
-        kuolemanLuku = 1.0 * hypyt.Value + matkaLaskuri.Value - 1.0 * eliksiirit.Value;
+        kuolemanLuku = 1.0 * hypyt.Value + matkaLaskuri.Value - 1.0 * eliksiirit.Value;  /* FUNKTION AVULLA : LaskeKuolemanLuku(hypyt.Value, matkaLaskuri.Value, eliksiirit.Value); */
         if (kuolemanLuku < kuolemanLuvunRaja)
             kuolemanNaytto.Add(" Selviät hengissä seuraavaan kokeeseen! ");
         else
             kuolemanNaytto.Add(" Sinut tullaan tappamaan! ");
     }
+
+
+   /* TÄTÄ FUNKTIOTA VOIDAAN KÄYTTÄÄ KUOLEMANLUVUN LASKEMISEEN. PELI EI TOIMI NIIN SMOOTHISTI TÄMÄN KANSSA.
+    /// <summary>
+    /// Laskee kuolemanluvun annettujen parametrien avulla.
+    /// </summary>
+    /// <param name="hyppyjenMaara">Pelaajan hyppyjen määrä</param>
+    /// <param name="liikuttuMatka">Pelaajan liikkuma matka</param>
+    /// <param name="keratytEliksiirit">Pelaajan keräämät eliksiirit</param>
+    /// <returns>Lukuarvo jota käytetään sen arvioimiseen, selviääkö pelaaja seuraavaan kenttään.</returns>
+    private double LaskeKuolemanLuku(int hyppyjenMaara, double liikuttuMatka, int keratytEliksiirit)
+    {
+       return 1.0 * hyppyjenMaara + liikuttuMatka - 1.0 * keratytEliksiirit;
+    }
+   */
 
 
     /// <summary>
