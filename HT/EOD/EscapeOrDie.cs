@@ -7,6 +7,13 @@ using Jypeli.Widgets;
 //using Microsoft.Xna.Framework;
 //using Microsoft.Xna.Framework.Input;
 
+/// @author Henri Leinonen
+/// @version 26.10.2020
+/// <summary>
+/// Escape Or Die- tasohyppelypeli.
+/// </summary>
+
+
 public class EscapeOrDie : PhysicsGame
 {
     // Pelaajaan liittyvät
@@ -39,7 +46,7 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
-    /// Escape Or Die- peli
+    /// Käynnistää pelin alkuvalikon.
     /// </summary>
     public override void Begin()
     {
@@ -62,26 +69,36 @@ public class EscapeOrDie : PhysicsGame
         Level.Background.CreateGradient(Color.Black, Color.White);
         
         // Valikon näppäimet
-        valikko = new Label[3];
-        nappiAloita = new Label("Aloita Peli");                      // Luo näppäimen "Aloita Peli"
+        valikko = new Label[4];
+        nappiAloita = new Label("Start Game");                      // Luo näppäimen "Aloita Peli"
         nappiAloita.Font = valikonFontti;
-        nappiAloita.Position = new Vector(0, 50);
+        nappiAloita.Position = new Vector(0, 100);
         valikko[0] =nappiAloita;
         Add(nappiAloita);
 
-        Label nappiTarina = new Label("Lue Tarina");                 // Luo näppäimen "Lue Tarina"
+        Label nappiTarina = new Label("Story");                     // Luo näppäimen "Lue Tarina"
         nappiTarina.Font = valikonFontti;
-        nappiTarina.Position = new Vector(0, -50);
+        nappiTarina.Position = new Vector(0, 0);
         valikko[1] = nappiTarina;
         Add(nappiTarina);
 
-        Label nappiUusiPeli = new Label("Uusi Peli");                // Luo näppäimen "Uusi Peli"
+        Label aaniAsetukset = new Label("Mute Music");              // Luo näppäimen "Mute Music"
+        aaniAsetukset.Font = teksti;
+        aaniAsetukset.Position = new Vector(300, -300);
+        valikko[2] = aaniAsetukset;
+        Add(aaniAsetukset);
+
+        Label nappiUusiPeli = new Label("New Game");                // Luo näppäimen "Uusi Peli"
+        nappiTarina.Font = valikonFontti;
         nappiUusiPeli.Position = new Vector(0, -100);
-        valikko[2] = nappiUusiPeli;
+        valikko[3] = nappiUusiPeli;
+
+       
 
         // Hiiren kuuntelijat
         Mouse.ListenOn(nappiAloita, MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
         Mouse.ListenOn(nappiTarina, MouseButton.Left, ButtonState.Pressed, NaytaTarina, null);
+        Mouse.ListenOn(aaniAsetukset, MouseButton.Left, ButtonState.Pressed, taustaMusaPois, null);
         Mouse.ListenMovement(1.0, ValikkoLiike, null);
     }
 
@@ -106,24 +123,22 @@ public class EscapeOrDie : PhysicsGame
         Add(gameOver);
 
         // "Uusi Peli"- näppäimen lisääminen
-        valikko[2].Position = new Vector(0, -100);      // taulukossa valikko[2]= nappiUusiPeli
-        valikko[2].Font = valikonFontti;
-        Add(valikko[2]);
+        valikko[3].Position = new Vector(0, -100);      // taulukossa valikko[3]= nappiUusiPeli
+        valikko[3].Font = valikonFontti;
+        Add(valikko[3]);
 
         // Hiiren kuuntelijat
-        Mouse.ListenOn(valikko[2], MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
+        Mouse.ListenOn(valikko[3], MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
         Mouse.ListenMovement(1.0, ValikkoLiike, null);
     }
 
 
     /// <summary>
-    /// Käynnistää uuden pelin.
+    /// Poistaa taustamusiikin.
     /// </summary>
-    private void UusiPeli()
+    private void taustaMusaPois()
     {
-        ClearAll();
-        LuoKentta();
-        LisaaNappaimet();
+        MediaPlayer.IsMuted = true;
     }
 
 
@@ -170,6 +185,17 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
+    /// Käynnistää uuden pelin.
+    /// </summary>
+    private void UusiPeli()
+    {
+        ClearAll();
+        LuoKentta();
+        LisaaNappaimet();
+    }
+
+
+    /// <summary>
     /// Luo kentän tilemap:n avulla. Kentällä liikkuvat tasot luodaan omalla aliohjelmalla.
     /// </summary>
     private void LuoKentta()
@@ -206,6 +232,7 @@ public class EscapeOrDie : PhysicsGame
         Camera.Follow(pelaaja);
         Camera.ZoomFactor = 5;
         Camera.StayInLevel = true;
+        IsFullScreen = true;
     }
 
 
