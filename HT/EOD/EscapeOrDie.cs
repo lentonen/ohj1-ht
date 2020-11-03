@@ -359,7 +359,7 @@ public class EscapeOrDie : PhysicsGame
         pelaaja.Height = 15;
         pelaaja.Mass = 4.0;
         pelaaja.Image = LoadImage("pelaaja.png");
-        AddCollisionHandler(pelaaja, "eliksiiri", TormaaEliksiiriin);
+        AddCollisionHandler(pelaaja, "eliksiiri", PelaajaEliksiiri);
         AddCollisionHandler(pelaaja, "ovi", PelaajaOvella);
         AddCollisionHandler(pelaaja, "avain", PelaajaAvain);
         AddCollisionHandler(pelaaja, "piikit", PelaajaPiikit);
@@ -422,7 +422,7 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     /// <param name="hahmo">Törmääjä</param>
     /// <param name="eliksiiri">Törmäyksen kohde</param>
-    private void TormaaEliksiiriin(PhysicsObject hahmo, PhysicsObject eliksiiri)
+    private void PelaajaEliksiiri(PhysicsObject hahmo, PhysicsObject eliksiiri)
     {
         SoundEffect eliksiiriKeraysAani = LoadSoundEffect("eliksiirinkerays");
         eliksiiriKeraysAani.Play();
