@@ -19,7 +19,7 @@ public class EscapeOrDie : PhysicsGame
     // Pelaajaan liittyvät
     private PlatformCharacter pelaaja;          // PlatformCharacter-tyyppinen pelaaja
     private int elamatJaljella;                 // Pelaajan jäljellä olevat elämät
-    private int avainLoytynyt;                  // Muuttuja joka reagoi avainmen löytymiseen
+    private int avainLoytynyt;                  // Muuttuja joka reagoi avaimen löytymiseen
     private int kenttaNro = 1;                  // Kenttänumero
 
 
@@ -33,7 +33,7 @@ public class EscapeOrDie : PhysicsGame
 
 
     // Valikkoon liittyvät
-    private List<Label> valikko;                // Label-lista valikon napeista
+    private List<Label> valikko;                // Label-lista valikon napeista. Tämä tarvitaan foreach-silmukkaa varten valikon animoinnissa.
     private Font teksti;                        // Fontti jota käytetään laskureissa ja valikon tarinassa.
 
 
@@ -140,12 +140,12 @@ public class EscapeOrDie : PhysicsGame
         Level.Background.CreateGradient(Color.Black, Color.White);
         
         // Tekstikenttä tarinalle
-        Label tarina1 = new Label(600, 600, "Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut. He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi."
+        Label tarina = new Label(600, 600, "Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut. He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi."
             +"Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan.");
-        tarina1.Font = teksti;
-        tarina1.SizeMode = TextSizeMode.Wrapped;
-        tarina1.Position = new Vector(0, 100);
-        Add(tarina1);
+        tarina.Font = teksti;
+        tarina.SizeMode = TextSizeMode.Wrapped;
+        tarina.Position = new Vector(0, 100);
+        Add(tarina);
 
         // "Uusi Peli"- näppäimen lisääminen 
         Label uusiPeli = LuoValikonNappain("Uusi peli", valikonFontti, 2);  // Luo "Uusi Peli"- painikkeen
@@ -208,11 +208,11 @@ public class EscapeOrDie : PhysicsGame
         MessageDisplay.Font = teksti;
 
         //Luodaan Laskurit, näytettävä teksti sekä liikkuvat tasot
-        LuoTasot();
+        LuoLiikkuvatTasot(); 
         LuoMatkaLaskuri();
-        HyppyLaskuri();
+        LuoHyppyLaskuri();
         LuoEliksiiriLaskuri();
-        KuolemanNaytto();
+        LuoKuolemanNaytto();
         LuoElamatNaytto();
 
         // Kameran asetukset
@@ -268,7 +268,7 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Aliohjelma joka luo kentälle liikkuvat tasot
     /// </summary>
-    private void LuoTasot()
+    private void LuoLiikkuvatTasot()
     {
         LisaaLiikkuvaTaso(new Vector(150, 125), 50, 20, 0.5 * Math.PI, Vector.UnitX);
         LisaaLiikkuvaTaso(new Vector(-350, 125), 50, 20, -0.35 * Math.PI, Vector.UnitX);
@@ -568,7 +568,7 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Laskuri joka laskee pelaajan hyppyjen lukumäärän ja näyttää sen näytöllä.
     /// </summary>
-    private void HyppyLaskuri()
+    private void LuoHyppyLaskuri()
     {
         hypyt = new IntMeter(0);
         LuoNaytto("Hypyt: {0:0}", Color.White, hypyt, 2);
@@ -604,7 +604,7 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Luo näytön joka näyttää sen, selviääkö pelaaja hengissä päästyään ovelle.
     /// </summary>
-    private void KuolemanNaytto()
+    private void LuoKuolemanNaytto()
     {
         kuolemanNaytto = new MessageDisplay();
         kuolemanNaytto.Font = teksti;
