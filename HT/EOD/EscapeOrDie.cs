@@ -208,7 +208,7 @@ public class EscapeOrDie : PhysicsGame
         MessageDisplay.Font = teksti;
 
         //Luodaan Laskurit, näytettävä teksti sekä liikkuvat tasot
-        LuoLiikkuvatTasot(); 
+        LuoLiikkuvatTasot(); // TODO: tee taulukko, josta haetaan tasojen paikat jokaisen levelin yhteydessä.
         LuoMatkaLaskuri();
         LuoHyppyLaskuri();
         LuoEliksiiriLaskuri();
