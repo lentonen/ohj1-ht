@@ -131,17 +131,18 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
-    /// Näyttää pelin taustatarinan. Näytetään myös "Uusi Peli"- painike taustatarinan alapuolella.
+    /// Ohjelma luo valikkoon näkymän, jossa yläosassa tekstiä
+    /// ja sen alapuolella "uusi peli"-painike.
     /// </summary>
-    private void NaytaTarina()
+    /// <param name="sisalto">Teksti joka näytetään</param>
+    private void tarinaValikko(string sisalto)
     {
         ClearAll();
         Font valikonFontti = LoadFont("valikkoFontti.ttf");
         Level.Background.CreateGradient(Color.Black, Color.White);
-        
+
         // Tekstikenttä tarinalle
-        Label tarina = new Label(600, 600, "Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut. He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi."
-            +"Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan.");
+        Label tarina = new Label(600, 600, sisalto);
         tarina.Font = teksti;
         tarina.SizeMode = TextSizeMode.Wrapped;
         tarina.Position = new Vector(0, 100);
@@ -153,6 +154,16 @@ public class EscapeOrDie : PhysicsGame
         // Hiiren kuuntelijat
         Mouse.ListenOn(uusiPeli, MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
         Mouse.ListenMovement(1.0, ValikkoLiike, null);
+    }
+    
+    
+    /// <summary>
+    /// Näyttää pelin taustatarinan. Näytetään myös "Uusi Peli"- painike taustatarinan alapuolella.
+    /// </summary>
+    private void NaytaTarina()
+    {
+        tarinaValikko("Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut. He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi."
+            + "Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan.");   
     }
 
 
@@ -188,38 +199,53 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void LuoKentta()
     {
-        Gravity = new Vector(0, -1000);    // Painovoima
-        
-        // Luodaan TileMap-taulukkon, johon tallennetaan kaikki kentät.
-        TileMap[] kenttaTaulukko = new TileMap[2];
-        kenttaTaulukko[kenttaNro-1] = TileMap.FromLevelAsset("kentta"+kenttaNro+".txt");
+        if (kenttaNro == 3) peliLoppu();
+        else
+        {
+            Gravity = new Vector(0, -1000);    // Painovoima
 
-        // Haetaan oikea kenttä taulukosta kenttaNro avulla ja luodaan kenttä.
-        TileMap kentta = kenttaTaulukko[kenttaNro - 1];
-        kentta.SetTileMethod('#', LisaaTaso);
-        kentta.SetTileMethod('*', LisaaEliksiiri);
-        kentta.SetTileMethod('P', LisaaPelaaja);
-        kentta.SetTileMethod('O', LisaaOvi);
-        kentta.SetTileMethod('A', LisaaAvain);
-        kentta.SetTileMethod('E', LisaaPiikit);
-        kentta.Execute(20, 20);
-        Level.CreateBorders();  
-        Level.Background.CreateGradient(Color.Black, Color.White);
-        MessageDisplay.Font = teksti;
+            // Luodaan TileMap-taulukkon, johon tallennetaan kaikki kentät.
+            TileMap[] kenttaTaulukko = new TileMap[2];
+            kenttaTaulukko[kenttaNro - 1] = TileMap.FromLevelAsset("kentta" + kenttaNro + ".txt");
 
-        //Luodaan Laskurit, näytettävä teksti sekä liikkuvat tasot
-        LuoLiikkuvatTasot(); // TODO: tee taulukko, josta haetaan tasojen paikat jokaisen levelin yhteydessä.
-        LuoMatkaLaskuri();
-        LuoHyppyLaskuri();
-        LuoEliksiiriLaskuri();
-        LuoKuolemanNaytto();
-        LuoElamatNaytto();
+            // Haetaan oikea kenttä taulukosta kenttaNro avulla ja luodaan kenttä.
+            TileMap kentta = kenttaTaulukko[kenttaNro - 1];
+            kentta.SetTileMethod('#', LisaaTaso);
+            kentta.SetTileMethod('*', LisaaEliksiiri);
+            kentta.SetTileMethod('P', LisaaPelaaja);
+            kentta.SetTileMethod('O', LisaaOvi);
+            kentta.SetTileMethod('A', LisaaAvain);
+            kentta.SetTileMethod('E', LisaaPiikit);
+            kentta.Execute(20, 20);
+            Level.CreateBorders();
+            Level.Background.CreateGradient(Color.Black, Color.White);
+            MessageDisplay.Font = teksti;
 
-        // Kameran asetukset
-        Camera.Follow(pelaaja);
-        Camera.ZoomFactor = 5;
-        Camera.StayInLevel = true;
-        //IsFullScreen = true;                          //Tämä päälle, jos halutaan FullScreen.
+            //Luodaan Laskurit, näytettävä teksti sekä liikkuvat tasot
+            LuoLiikkuvatTasot(); // TODO: tee taulukko, josta haetaan tasojen paikat jokaisen levelin yhteydessä.
+            LuoMatkaLaskuri();
+            LuoHyppyLaskuri();
+            LuoEliksiiriLaskuri();
+            LuoKuolemanNaytto();
+            LuoElamatNaytto();
+
+            // Kameran asetukset
+            Camera.Follow(pelaaja);
+            Camera.ZoomFactor = 1;
+            Camera.StayInLevel = true;
+            //IsFullScreen = true;                          //Tämä päälle, jos halutaan FullScreen.
+        }
+    }
+
+
+    /// <summary>
+    /// Näyttää pelin lopputarinan. Näytetään myös "Uusi Peli"- painike tarinan alapuolella.
+    /// </summary>
+    private void peliLoppu()
+    {
+        kenttaNro = 1;
+        tarinaValikko("Ilkeät ulkoavaruuden oliot päästivät sinut vapaaksi. Elät elämääsi onnellisempana kuin ennen kaapausta"
+            + " ja toivot, että kaikki saisivat kokea saman kuin sinä!");
     }
 
 
@@ -270,10 +296,14 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void LuoLiikkuvatTasot()
     {
-        LisaaLiikkuvaTaso(new Vector(150, 125), 50, 20, 0.5 * Math.PI, Vector.UnitX);
-        LisaaLiikkuvaTaso(new Vector(-350, 125), 50, 20, -0.35 * Math.PI, Vector.UnitX);
-        LisaaLiikkuvaTaso(new Vector(-100, 250), 50, 20, 0.75 * Math.PI, Vector.UnitY);
-        LisaaLiikkuvaTaso(new Vector(-425, 150), 50, 20, -0.5 * Math.PI, Vector.UnitY);
+        int[,] tasojenPaikat= new int[,]{{ 150, 125 ,-350, 125, -100, 250, -425, 150 },
+                                         {   0, -50, 0,-100,  -200,   100, 200, -150  } } ;
+
+        
+        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 0], tasojenPaikat[kenttaNro - 1, 1]), 50, 20, 0.5 * Math.PI, Vector.UnitX);
+        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 2], tasojenPaikat[kenttaNro - 1, 3]), 50, 20, -0.35 * Math.PI, Vector.UnitX);
+        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 4], tasojenPaikat[kenttaNro - 1, 5]), 50, 20, 0.75 * Math.PI, Vector.UnitY);
+        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 6], tasojenPaikat[kenttaNro - 1, 7]), 50, 20, -0.5 * Math.PI, Vector.UnitY);
     }
 
 
