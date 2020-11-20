@@ -275,8 +275,6 @@ public class EscapeOrDie : PhysicsGame
     {
         int[,] tasojenPaikat = new int[,]{{ 150, 125 ,-350, 125, -100, 250, -425, 150 },
                                          {   0, -50, 0,-100,  -200,   100, 200, -150  } };
-
-
         LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 0], tasojenPaikat[kenttaNro - 1, 1]), 50, 20, 0.5 * Math.PI, Vector.UnitX);
         LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 2], tasojenPaikat[kenttaNro - 1, 3]), 50, 20, -0.35 * Math.PI, Vector.UnitX);
         LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 4], tasojenPaikat[kenttaNro - 1, 5]), 50, 20, 0.75 * Math.PI, Vector.UnitY);
@@ -411,7 +409,6 @@ public class EscapeOrDie : PhysicsGame
 
         Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "Näytä ohjeet");
         Keyboard.Listen(Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
-
         Keyboard.Listen(Key.Left, ButtonState.Down, Liikuta, "Liikkuu vasemmalle", pelaaja, -nopeus);
         Keyboard.Listen(Key.Right, ButtonState.Down, Liikuta, "Liikkuu vasemmalle", pelaaja, nopeus);
         Keyboard.Listen(Key.Up, ButtonState.Pressed, Hyppaa, "Pelaaja hyppää", pelaaja, hyppynopeus);
@@ -591,12 +588,10 @@ public class EscapeOrDie : PhysicsGame
     private void LuoMatkaLaskuri()
     {
         matkaLaskuri = new DoubleMeter(0);
-
         Timer matkaLaskurinTriggeri = new Timer();
         matkaLaskurinTriggeri.Interval = 0.05;
         matkaLaskurinTriggeri.Timeout += LaskeJosNappiPohjassa;
         matkaLaskurinTriggeri.Start();
-
         LuoNaytto("Liikuttu matka: {0:N1}", Color.White, matkaLaskuri, 3);
     }
 
