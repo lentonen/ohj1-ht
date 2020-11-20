@@ -20,7 +20,7 @@ public class EscapeOrDie : PhysicsGame
     private PlatformCharacter pelaaja;          // PlatformCharacter-tyyppinen pelaaja
     private int elamatJaljella;                 // Pelaajan jäljellä olevat elämät
     private int avainLoytynyt;                  // Muuttuja joka reagoi avaimen löytymiseen
-    private int kenttaNro = 1;                  // Kenttänumero
+    private int kenttaNro = 2;                  // Kenttänumero
 
 
     //Laskureihin liittyvät
@@ -540,31 +540,11 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="mittari">Mihin mittariin näyttö on liitetty</param>
     /// <param name="moneskoMittari">Luku kertoo mittarin paikan ruudun oikeassa yläreunassa. 0 = ylin mittari, 1 = toisiksi ylin, jne...</param>
     /// <returns>Näyttö johon haluttu mittari on kytketty</returns>
-    private Label LuoNaytto(string format, Jypeli.Color vari, IntMeter mittari, int moneskoMittari)
+    private Label LuoNaytto(string format, Jypeli.Color vari, Meter mittari, int moneskoMittari)
     {
         Label naytto = new Label(format);
         naytto.Font = teksti;
         naytto.IntFormatString = format;
-        naytto.BindTo(mittari);
-        naytto.Position = new Vector(Screen.Right - naytto.Width / 2 - 20,
-                         Screen.Top - naytto.Height / 2 - moneskoMittari * naytto.Height);
-        naytto.TextColor = vari;
-        Add(naytto);
-        return naytto;
-    }
-
-
-    /// <summary>
-    /// Overload aliohjelma, jota voidaan käyttää DoubleMeter-mittarin lukeman näyttämiseen.
-    /// </summary>
-    /// <param name="format">Muoto jossa teksti näytetään</param>
-    /// <param name="mittari">Mihin mittariin näyttö on liitetty</param>
-    /// <param name="moneskoMittari">Luku kertoo mittarin paikan ruudun oikeassa yläreunassa. 0 = ylin mittari, 1 = toisiksi ylin, jne...</param>
-    /// <returns>Näyttö johon haluttu mittari on kytketty</returns>
-    private Label LuoNaytto(string format, Jypeli.Color vari, DoubleMeter mittari, int moneskoMittari)
-    {
-        Label naytto = new Label(format);
-        naytto.Font = teksti;
         naytto.DoubleFormatString = format;
         naytto.BindTo(mittari);
         naytto.Position = new Vector(Screen.Right - naytto.Width / 2 - 20,
