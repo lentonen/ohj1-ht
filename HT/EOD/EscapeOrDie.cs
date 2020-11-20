@@ -77,24 +77,6 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
-    /// Luo valikon näppäimiä
-    /// </summary>
-    /// <param name="nappaimenTeksti">Teksti joka näytetään näppäimessä</param>
-    /// <param name="fontti">käytettävä fontti</param>
-    /// <param name="moneskoNappain">valikon näppäimen järjestysluku ylhäältä alas laskettuna</param>
-    /// <returns></returns>
-    private Label LuoValikonNappain(string nappaimenTeksti, Font fontti, int moneskoNappain)
-    {
-        Label nappi = new Label(nappaimenTeksti);
-        nappi.Font = fontti;
-        nappi.Position = new Vector(0, 100 - moneskoNappain * 100);
-        valikko.Add(nappi);
-        Add(nappi);
-        return nappi;
-    }
-
-
-    /// <summary>
     /// Luo valikon, jonka taustalla teksti Game Over. Tekstin alapuolella painike "Uusi Peli".
     /// </summary>
     private void GameOverValikko()
@@ -103,9 +85,9 @@ public class EscapeOrDie : PhysicsGame
         elamatJaljella = 3;
 
         //Fontti ja tausta
-        Font valikonFontti = LoadFont("valikkoFontti.ttf");         
+        Font valikonFontti = LoadFont("valikkoFontti.ttf");
         Level.Background.CreateGradient(Color.Black, Color.White);
-        
+
         // "Game Over"- teksti
         Label gameOver = new Label(600, 300, "GAME OVER");
         gameOver.SizeMode = TextSizeMode.StretchText;
@@ -122,11 +104,23 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
-    /// Poistaa taustamusiikin.
+    /// Näyttää pelin taustatarinan. Näytetään myös "Uusi Peli"- painike taustatarinan alapuolella.
     /// </summary>
-    private void taustaMusaPois()
+    private void NaytaTarina()
     {
-        MediaPlayer.IsMuted = true;
+        tarinaValikko("Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut. He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi."
+            + "Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan.");
+    }
+
+
+    /// <summary>
+    /// Näyttää pelin lopputarinan. Näytetään myös "Uusi Peli"- painike tarinan alapuolella.
+    /// </summary>
+    private void peliLoppu()
+    {
+        kenttaNro = 1;
+        tarinaValikko("Ilkeät ulkoavaruuden oliot päästivät sinut vapaaksi. Elät elämääsi onnellisempana kuin ennen kaapausta"
+            + " ja toivot, että kaikki saisivat kokea saman kuin sinä!");
     }
 
 
@@ -135,7 +129,7 @@ public class EscapeOrDie : PhysicsGame
     /// ja sen alapuolella "uusi peli"-painike.
     /// </summary>
     /// <param name="sisalto">Teksti joka näytetään</param>
-    private void tarinaValikko(string sisalto)
+    private void tarinaValikko(string sisalto)  // Tämä on erillinen ohjelma sen vuoksi, että sitä käytetään myös lopputarinan yhteydessä.
     {
         ClearAll();
         Font valikonFontti = LoadFont("valikkoFontti.ttf");
@@ -155,15 +149,32 @@ public class EscapeOrDie : PhysicsGame
         Mouse.ListenOn(uusiPeli, MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
         Mouse.ListenMovement(1.0, ValikkoLiike, null);
     }
-    
-    
+
+
     /// <summary>
-    /// Näyttää pelin taustatarinan. Näytetään myös "Uusi Peli"- painike taustatarinan alapuolella.
+    /// Luo valikon näppäimiä
     /// </summary>
-    private void NaytaTarina()
+    /// <param name="nappaimenTeksti">Teksti joka näytetään näppäimessä</param>
+    /// <param name="fontti">käytettävä fontti</param>
+    /// <param name="moneskoNappain">valikon näppäimen järjestysluku ylhäältä alas laskettuna</param>
+    /// <returns></returns>
+    private Label LuoValikonNappain(string nappaimenTeksti, Font fontti, int moneskoNappain)
     {
-        tarinaValikko("Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut. He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi."
-            + "Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan.");   
+        Label nappi = new Label(nappaimenTeksti);
+        nappi.Font = fontti;
+        nappi.Position = new Vector(0, 100 - moneskoNappain * 100);
+        valikko.Add(nappi);
+        Add(nappi);
+        return nappi;
+    }
+
+
+    /// <summary>
+    /// Poistaa taustamusiikin.
+    /// </summary>
+    private void taustaMusaPois()
+    {
+        MediaPlayer.IsMuted = true;
     }
 
 
@@ -231,21 +242,10 @@ public class EscapeOrDie : PhysicsGame
 
             // Kameran asetukset
             Camera.Follow(pelaaja);
-            Camera.ZoomFactor = 1;
+            Camera.ZoomFactor = 5;
             Camera.StayInLevel = true;
             //IsFullScreen = true;                          //Tämä päälle, jos halutaan FullScreen.
         }
-    }
-
-
-    /// <summary>
-    /// Näyttää pelin lopputarinan. Näytetään myös "Uusi Peli"- painike tarinan alapuolella.
-    /// </summary>
-    private void peliLoppu()
-    {
-        kenttaNro = 1;
-        tarinaValikko("Ilkeät ulkoavaruuden oliot päästivät sinut vapaaksi. Elät elämääsi onnellisempana kuin ennen kaapausta"
-            + " ja toivot, että kaikki saisivat kokea saman kuin sinä!");
     }
 
 
@@ -269,6 +269,22 @@ public class EscapeOrDie : PhysicsGame
 
 
     /// <summary>
+    /// Aliohjelma joka luo kentälle liikkuvat tasot
+    /// </summary>
+    private void LuoLiikkuvatTasot()
+    {
+        int[,] tasojenPaikat = new int[,]{{ 150, 125 ,-350, 125, -100, 250, -425, 150 },
+                                         {   0, -50, 0,-100,  -200,   100, 200, -150  } };
+
+
+        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 0], tasojenPaikat[kenttaNro - 1, 1]), 50, 20, 0.5 * Math.PI, Vector.UnitX);
+        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 2], tasojenPaikat[kenttaNro - 1, 3]), 50, 20, -0.35 * Math.PI, Vector.UnitX);
+        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 4], tasojenPaikat[kenttaNro - 1, 5]), 50, 20, 0.75 * Math.PI, Vector.UnitY);
+        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 6], tasojenPaikat[kenttaNro - 1, 7]), 50, 20, -0.5 * Math.PI, Vector.UnitY);
+    }
+
+
+    /// <summary>
     /// Luo liikkuvan tason.
     /// </summary>
     /// <param name="paikka">Tason keskipisteen paikka</param>
@@ -288,22 +304,6 @@ public class EscapeOrDie : PhysicsGame
         liikkuvaTaso.Height = 5;
         liikkuvaTaso.Oscillate(suunta, 75, 0.2, vaihe);
         Add(liikkuvaTaso);    
-    }
-
-
-    /// <summary>
-    /// Aliohjelma joka luo kentälle liikkuvat tasot
-    /// </summary>
-    private void LuoLiikkuvatTasot()
-    {
-        int[,] tasojenPaikat= new int[,]{{ 150, 125 ,-350, 125, -100, 250, -425, 150 },
-                                         {   0, -50, 0,-100,  -200,   100, 200, -150  } } ;
-
-        
-        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 0], tasojenPaikat[kenttaNro - 1, 1]), 50, 20, 0.5 * Math.PI, Vector.UnitX);
-        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 2], tasojenPaikat[kenttaNro - 1, 3]), 50, 20, -0.35 * Math.PI, Vector.UnitX);
-        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 4], tasojenPaikat[kenttaNro - 1, 5]), 50, 20, 0.75 * Math.PI, Vector.UnitY);
-        LisaaLiikkuvaTaso(new Vector(tasojenPaikat[kenttaNro - 1, 6], tasojenPaikat[kenttaNro - 1, 7]), 50, 20, -0.5 * Math.PI, Vector.UnitY);
     }
 
 
