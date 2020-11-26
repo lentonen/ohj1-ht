@@ -163,7 +163,7 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="nappaimenTeksti">Teksti joka näytetään näppäimessä</param>
     /// <param name="fontti">käytettävä fontti</param>
     /// <param name="moneskoNappain">valikon näppäimen järjestysluku ylhäältä alas laskettuna</param>
-    /// <returns></returns>
+    /// <returns>Luotu näppäin</returns>
     private Label LuoValikonNappain(List<Label> valikko, string nappaimenTeksti, Font fontti, int moneskoNappain)
     {
         Label nappi = new Label(nappaimenTeksti);
@@ -297,7 +297,6 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="korkeus">Tason korkeus</param>
     /// <param name="vaihe">Tason värähtelyn vaihe</param>
     /// <param name="suunta"></param>
-    /// <returns>Liikkuva taso</returns>
     private void LisaaLiikkuvaTaso(Vector paikka, double leveys, double korkeus, double vaihe, Vector suunta)
     {
         PhysicsObject liikkuvaTaso = new PhysicsObject(leveys, korkeus);
@@ -543,7 +542,6 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="format">Muoto jossa teksti näytetään</param>
     /// <param name="mittari">Mihin mittariin näyttö on liitetty</param>
     /// <param name="moneskoMittari">Luku kertoo mittarin paikan ruudun oikeassa yläreunassa. 0 = ylin mittari, 1 = toisiksi ylin, jne...</param>
-    /// <returns>Näyttö johon haluttu mittari on kytketty</returns>
     private void LuoNaytto(string format, Jypeli.Color vari, Meter mittari, int moneskoMittari)
     {
         Label naytto = new Label(format);
@@ -555,7 +553,6 @@ public class EscapeOrDie : PhysicsGame
                          Screen.Top - naytto.Height / 2 - moneskoMittari * naytto.Height);
         naytto.TextColor = vari;
         Add(naytto);
-        //return naytto;
     }
 
 
