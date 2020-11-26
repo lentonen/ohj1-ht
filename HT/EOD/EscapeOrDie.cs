@@ -652,7 +652,7 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="liikuttuMatka">Pelaajan liikkuma matka</param>
     /// <param name="keratytEliksiirit">Pelaajan keräämät eliksiirit</param>
     /// <returns>Lukuarvo jota käytetään sen arvioimiseen, selviääkö pelaaja seuraavaan kenttään.</returns>
-    private double LaskeKuolemanLuku(int hyppyjenMaara, double liikuttuMatka, int keratytEliksiirit)
+    private static double LaskeKuolemanLuku(int hyppyjenMaara, double liikuttuMatka, int keratytEliksiirit)
     {
        return 1.0 * hyppyjenMaara + liikuttuMatka - 1.0 * keratytEliksiirit;
     }
