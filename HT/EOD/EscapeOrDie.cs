@@ -8,7 +8,7 @@ using Jypeli.Widgets;
 //using Microsoft.Xna.Framework.Input;
 
 /// @author Henri Leinonen
-/// @version 26.10.2020
+/// @version 26.11.2020
 /// <summary>
 /// Escape Or Die- tasohyppelypeli.
 /// </summary>
@@ -20,7 +20,7 @@ public class EscapeOrDie : PhysicsGame
     private PlatformCharacter pelaaja;          // PlatformCharacter-tyyppinen pelaaja
     private int elamatJaljella;                 // Pelaajan jäljellä olevat elämät
     private int avainLoytynyt;                  // Muuttuja joka reagoi avaimen löytymiseen
-    private int kenttaNro = 2;                  // Kenttänumero
+    private int kenttaNro = 1;                  // Kenttänumero
 
 
     //Laskureihin liittyvät
@@ -33,8 +33,7 @@ public class EscapeOrDie : PhysicsGame
 
 
     // Valikkoon liittyvät
-    private List<Label> valikko;                // Label-lista valikon napeista. Tämä tarvitaan foreach-silmukkaa varten valikon animoinnissa.
-    private Font teksti;                        // Fontti jota käytetään laskureissa ja valikon tarinassa.
+    private Font teksti;                        // Fontti jota käytetään laskureissa sekä valikon tarinassa.
 
 
     /// <summary>
@@ -62,17 +61,17 @@ public class EscapeOrDie : PhysicsGame
         Level.Background.CreateGradient(Color.Black, Color.White);
         
         // Valikon näppäimet
-        valikko = new List<Label>();
+        List<Label> alkuValikko = new List<Label>();
 
-        Label nappiAloita = LuoValikonNappain("Aloita Peli", valikonFontti, 0);     // Luo näppäimen "Aloita Peli"
-        Label nappiTarina = LuoValikonNappain("Lue tarina", valikonFontti, 1);      // Luo näppäimen "Lue Tarina"
-        Label aaniAsetukset = LuoValikonNappain("Mute Music", valikonFontti, 2);    // Luo näppäimen "Mute Music"
+        Label nappiAloita = LuoValikonNappain(alkuValikko, "Aloita Peli", valikonFontti, 0);     // Luo näppäimen "Aloita Peli"
+        Label nappiTarina = LuoValikonNappain(alkuValikko, "Lue tarina", valikonFontti, 1);      // Luo näppäimen "Lue Tarina"
+        Label aaniAsetukset = LuoValikonNappain(alkuValikko, "Mute Music", valikonFontti, 2);    // Luo näppäimen "Mute Music"
 
         // Hiiren kuuntelijat
         Mouse.ListenOn(nappiAloita, MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
         Mouse.ListenOn(nappiTarina, MouseButton.Left, ButtonState.Pressed, NaytaTarina, null);
-        Mouse.ListenOn(aaniAsetukset, MouseButton.Left, ButtonState.Pressed, taustaMusaPois, null);
-        Mouse.ListenMovement(1.0, ValikkoLiike, null);
+        Mouse.ListenOn(aaniAsetukset, MouseButton.Left, ButtonState.Pressed, TaustaMusaPois, null);
+        Mouse.ListenMovement(1.0, ValikkoLiike, "Valikon animointi", alkuValikko);
     }
 
 
@@ -88,6 +87,9 @@ public class EscapeOrDie : PhysicsGame
         Font valikonFontti = LoadFont("valikkoFontti.ttf");
         Level.Background.CreateGradient(Color.Black, Color.White);
 
+        // Valikon näppäimet
+        List<Label> overValikko = new List<Label>();
+
         // "Game Over"- teksti
         Label gameOver = new Label(600, 300, "GAME OVER");
         gameOver.SizeMode = TextSizeMode.StretchText;
@@ -95,11 +97,11 @@ public class EscapeOrDie : PhysicsGame
         gameOver.Position = new Vector(0, 100);
         Add(gameOver);
 
-        Label uusiPeli = LuoValikonNappain("Uusi peli", valikonFontti, 2);  // Luo "Uusi Peli"- painikkeen
+        Label uusiPeli = LuoValikonNappain(overValikko, "Uusi peli", valikonFontti, 2);  // Luo "Uusi Peli"- painikkeen
 
         // Hiiren kuuntelijat
         Mouse.ListenOn(uusiPeli, MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
-        Mouse.ListenMovement(1.0, ValikkoLiike, null);
+        Mouse.ListenMovement(1.0, ValikkoLiike, "Valikon animointi", overValikko);
     }
 
 
@@ -108,7 +110,7 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void NaytaTarina()
     {
-        tarinaValikko("Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut. He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi."
+        TarinaValikko("Ilkeät ulkoavaruuden oliot ovat kaapanneet sinut. He tekevät sinulla kieroja testejä, joiden avulla tarkkailevat käytöstäsi."
             + "Pysyt hengissä vain kun käyttäydyt testaajien antamien sääntöjen mukaan.");
     }
 
@@ -116,10 +118,10 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Näyttää pelin lopputarinan. Näytetään myös "Uusi Peli"- painike tarinan alapuolella.
     /// </summary>
-    private void peliLoppu()
+    private void NaytaLoppuTarina()
     {
         kenttaNro = 1;
-        tarinaValikko("Ilkeät ulkoavaruuden oliot päästivät sinut vapaaksi. Elät elämääsi onnellisempana kuin ennen kaapausta"
+        TarinaValikko("Ilkeät ulkoavaruuden oliot päästivät sinut vapaaksi. Elät elämääsi onnellisempana kuin ennen kaapausta"
             + " ja toivot, että kaikki saisivat kokea saman kuin sinä!");
     }
 
@@ -129,11 +131,14 @@ public class EscapeOrDie : PhysicsGame
     /// ja sen alapuolella "uusi peli"-painike.
     /// </summary>
     /// <param name="sisalto">Teksti joka näytetään</param>
-    private void tarinaValikko(string sisalto)  // Tämä on erillinen ohjelma sen vuoksi, että sitä käytetään myös lopputarinan yhteydessä.
+    private void TarinaValikko(string sisalto)  // Tämä on erillinen ohjelma sen vuoksi, että sitä käytetään myös lopputarinan yhteydessä.
     {
         ClearAll();
         Font valikonFontti = LoadFont("valikkoFontti.ttf");
         Level.Background.CreateGradient(Color.Black, Color.White);
+
+        // Valikon näppäimet
+        List<Label> tarinaValikko = new List<Label>();
 
         // Tekstikenttä tarinalle
         Label tarina = new Label(600, 600, sisalto);
@@ -143,22 +148,23 @@ public class EscapeOrDie : PhysicsGame
         Add(tarina);
 
         // "Uusi Peli"- näppäimen lisääminen 
-        Label uusiPeli = LuoValikonNappain("Uusi peli", valikonFontti, 2);  // Luo "Uusi Peli"- painikkeen
+        Label uusiPeli = LuoValikonNappain(tarinaValikko, "Uusi peli", valikonFontti, 2);  // Luo "Uusi Peli"- painikkeen
 
         // Hiiren kuuntelijat
         Mouse.ListenOn(uusiPeli, MouseButton.Left, ButtonState.Pressed, UusiPeli, null);
-        Mouse.ListenMovement(1.0, ValikkoLiike, null);
+        Mouse.ListenMovement(1.0, ValikkoLiike, "Valikon animointi", tarinaValikko);
     }
 
 
     /// <summary>
     /// Luo valikon näppäimiä
     /// </summary>
+    /// <param name="valikko">Lista, johon näppäin tallennetaan</param>
     /// <param name="nappaimenTeksti">Teksti joka näytetään näppäimessä</param>
     /// <param name="fontti">käytettävä fontti</param>
     /// <param name="moneskoNappain">valikon näppäimen järjestysluku ylhäältä alas laskettuna</param>
     /// <returns></returns>
-    private Label LuoValikonNappain(string nappaimenTeksti, Font fontti, int moneskoNappain)
+    private Label LuoValikonNappain(List<Label> valikko, string nappaimenTeksti, Font fontti, int moneskoNappain)
     {
         Label nappi = new Label(nappaimenTeksti);
         nappi.Font = fontti;
@@ -172,7 +178,7 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Poistaa taustamusiikin.
     /// </summary>
-    private void taustaMusaPois()
+    private void TaustaMusaPois()
     {
         MediaPlayer.IsMuted = true;
     }
@@ -181,7 +187,8 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Muuttaa valikon tekstien värin, kun hiiri viedään tekstin päälle.
     /// </summary>
-    private void ValikkoLiike()
+    /// <param name="valikko">Lista, jonka näppäimiin animointi halutaan.</param>
+    private void ValikkoLiike(List<Label> valikko)
     {
         foreach (Label nappi in valikko)
         {
@@ -210,7 +217,7 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void LuoKentta()
     {
-        if (kenttaNro == 3) peliLoppu();
+        if (kenttaNro == 3) NaytaLoppuTarina();
         else
         {
             Gravity = new Vector(0, -1000);    // Painovoima
@@ -242,7 +249,7 @@ public class EscapeOrDie : PhysicsGame
 
             // Kameran asetukset
             Camera.Follow(pelaaja);
-            Camera.ZoomFactor = 5;
+            Camera.ZoomFactor = 3;
             Camera.StayInLevel = true;
             //IsFullScreen = true;                          //Tämä päälle, jos halutaan FullScreen.
         }
@@ -537,7 +544,7 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="mittari">Mihin mittariin näyttö on liitetty</param>
     /// <param name="moneskoMittari">Luku kertoo mittarin paikan ruudun oikeassa yläreunassa. 0 = ylin mittari, 1 = toisiksi ylin, jne...</param>
     /// <returns>Näyttö johon haluttu mittari on kytketty</returns>
-    private Label LuoNaytto(string format, Jypeli.Color vari, Meter mittari, int moneskoMittari)
+    private void LuoNaytto(string format, Jypeli.Color vari, Meter mittari, int moneskoMittari)
     {
         Label naytto = new Label(format);
         naytto.Font = teksti;
@@ -548,7 +555,7 @@ public class EscapeOrDie : PhysicsGame
                          Screen.Top - naytto.Height / 2 - moneskoMittari * naytto.Height);
         naytto.TextColor = vari;
         Add(naytto);
-        return naytto;
+        //return naytto;
     }
 
 
