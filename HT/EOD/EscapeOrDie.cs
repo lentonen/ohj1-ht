@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Jypeli;
-using Jypeli.Assets;
-using Jypeli.Controls;
-using Jypeli.Widgets;
-//using Microsoft.Xna.Framework;
-//using Microsoft.Xna.Framework.Input;
 
 /// @author Henri Leinonen
 /// @version 26.11.2020
@@ -20,7 +15,7 @@ public class EscapeOrDie : PhysicsGame
     private PlatformCharacter pelaaja;          // PlatformCharacter-tyyppinen pelaaja
     private int elamatJaljella;                 // Pelaajan jäljellä olevat elämät
     private int avainLoytynyt;                  // Muuttuja joka reagoi avaimen löytymiseen
-    private int kenttaNro = 1;                  // Kenttänumero
+    private int kenttaNro = 2;                  // Kenttänumero
 
 
     //Laskureihin liittyvät
@@ -217,42 +212,45 @@ public class EscapeOrDie : PhysicsGame
     /// </summary>
     private void LuoKentta()
     {
-        if (kenttaNro == 3) NaytaLoppuTarina();
-        else
+        if (kenttaNro == 3)
         {
-            Gravity = new Vector(0, -1000);    // Painovoima
-
-            // Luodaan TileMap-taulukkon, johon tallennetaan kaikki kentät.
-            TileMap[] kenttaTaulukko = new TileMap[2];
-            kenttaTaulukko[kenttaNro - 1] = TileMap.FromLevelAsset("kentta" + kenttaNro + ".txt");
-
-            // Haetaan oikea kenttä taulukosta kenttaNro avulla ja luodaan kenttä.
-            TileMap kentta = kenttaTaulukko[kenttaNro - 1];
-            kentta.SetTileMethod('#', LisaaTaso);
-            kentta.SetTileMethod('*', LisaaEliksiiri);
-            kentta.SetTileMethod('P', LisaaPelaaja);
-            kentta.SetTileMethod('O', LisaaOvi);
-            kentta.SetTileMethod('A', LisaaAvain);
-            kentta.SetTileMethod('E', LisaaPiikit);
-            kentta.Execute(20, 20);
-            Level.CreateBorders();
-            Level.Background.CreateGradient(Color.Black, Color.White);
-            MessageDisplay.Font = teksti;
-
-            //Luodaan Laskurit, näytettävä teksti sekä liikkuvat tasot
-            LuoLiikkuvatTasot(); // TODO: tee taulukko, josta haetaan tasojen paikat jokaisen levelin yhteydessä.
-            LuoMatkaLaskuri();
-            LuoHyppyLaskuri();
-            LuoEliksiiriLaskuri();
-            LuoKuolemanNaytto();
-            LuoElamatNaytto();
-
-            // Kameran asetukset
-            Camera.Follow(pelaaja);
-            Camera.ZoomFactor = 3;
-            Camera.StayInLevel = true;
-            //IsFullScreen = true;                          //Tämä päälle, jos halutaan FullScreen.
+            NaytaLoppuTarina();
+            return;
         }
+ 
+        Gravity = new Vector(0, -1000);    // Painovoima
+        
+        // Luodaan TileMap-taulukkon, johon tallennetaan kaikki kentät.
+        TileMap[] kenttaTaulukko = new TileMap[2];
+        kenttaTaulukko[kenttaNro - 1] = TileMap.FromLevelAsset("kentta" + kenttaNro + ".txt");
+        
+        // Haetaan oikea kenttä taulukosta kenttaNro avulla ja luodaan kenttä.
+        TileMap kentta = kenttaTaulukko[kenttaNro - 1];
+        kentta.SetTileMethod('#', LisaaTaso);
+        kentta.SetTileMethod('*', LisaaEliksiiri);
+        kentta.SetTileMethod('P', LisaaPelaaja);
+        kentta.SetTileMethod('O', LisaaOvi);
+        kentta.SetTileMethod('A', LisaaAvain);
+        kentta.SetTileMethod('E', LisaaPiikit);
+        kentta.Execute(20, 20);
+        Level.CreateBorders();
+        Level.Background.CreateGradient(Color.Black, Color.White);
+        MessageDisplay.Font = teksti;
+        
+        //Luodaan Laskurit, näytettävä teksti sekä liikkuvat tasot
+        LuoLiikkuvatTasot(); // TODO: tee taulukko, josta haetaan tasojen paikat jokaisen levelin yhteydessä.
+        LuoMatkaLaskuri();
+        LuoHyppyLaskuri();
+        LuoEliksiiriLaskuri();
+        LuoKuolemanNaytto();
+        LuoElamatNaytto();
+        
+        // Kameran asetukset
+        Camera.Follow(pelaaja);
+        Camera.ZoomFactor = 3;
+        Camera.StayInLevel = true;
+        //IsFullScreen = true;                          //Tämä päälle, jos halutaan FullScreen.
+        
     }
 
 
@@ -296,7 +294,7 @@ public class EscapeOrDie : PhysicsGame
     /// <param name="leveys">Tason leveys</param>
     /// <param name="korkeus">Tason korkeus</param>
     /// <param name="vaihe">Tason värähtelyn vaihe</param>
-    /// <param name="suunta"></param>
+    /// <param name="suunta">Kertoo liikkuuko taso x- vai y-suuntaan</param>
     private void LisaaLiikkuvaTaso(Vector paikka, double leveys, double korkeus, double vaihe, Vector suunta)
     {
         PhysicsObject liikkuvaTaso = new PhysicsObject(leveys, korkeus);
@@ -453,8 +451,8 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Aliohjelma kun törmätään hidastuseliksiiriin.
     /// </summary>
-    /// <param name="hahmo">Törmääjä</param>
-    /// <param name="eliksiiri">Törmäyksen kohde</param>
+    /// <param name="hahmo">Törmääjä.</param>
+    /// <param name="eliksiiri">Törmäyksen kohde.</param>
     private void PelaajaEliksiiri(PhysicsObject hahmo, PhysicsObject eliksiiri)
     {
         SoundEffect eliksiiriKeraysAani = LoadSoundEffect("eliksiirinkerays");
@@ -467,8 +465,8 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Aliohjelma kun törmätään oveen.
     /// </summary>
-    /// <param name="pelaaja"></param>
-    /// <param name="ovi"></param>
+    /// <param name="pelaaja">Pelaaja joka törmää.</param>
+    /// <param name="ovi">Ovi johon törmättiin.</param>
     private void PelaajaOvella(PhysicsObject pelaaja, PhysicsObject ovi)
     {   
         if (avainLoytynyt == 1 && kuolemanLuku < kuolemanLuvunRaja) 
@@ -491,8 +489,8 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Aliohjelma kun törmätään avaimeen.
     /// </summary>
-    /// <param name="pelaaja"></param>
-    /// <param name="avain"></param>
+    /// <param name="pelaaja">Pelaaja joka törmää.</param>
+    /// <param name="avain">Vain johon törmätään.</param>
     private void PelaajaAvain(PhysicsObject pelaaja, PhysicsObject avain)
     {
         SoundEffect avaimenKeraysAani = LoadSoundEffect("avaimenKerays");
@@ -505,8 +503,8 @@ public class EscapeOrDie : PhysicsGame
     /// <summary>
     /// Aliohjelma kun törmätään piikkeihin.
     /// </summary>
-    /// <param name="pelaaja"></param>
-    /// <param name="piikit"></param>
+    /// <param name="pelaaja">Pelaaja joka törmää.</param>
+    /// <param name="piikit">Piikki johon törmätään.</param>
     private void PelaajaPiikit(PhysicsObject pelaaja, PhysicsObject piikit)
     {
         PelaajaKuolee();
