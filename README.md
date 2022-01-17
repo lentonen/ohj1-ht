@@ -1,3 +1,3 @@
-# Ohjelmointi 1 -kurssin harjoitustyö
+# Programming 1 -practical work
 
-## Peli - Escape or die
+## Game - Escape or die
